@@ -61,7 +61,7 @@ class EmailNotificationBackendTestCase(TestCase):
 
         msg = mail.outbox[0]
         self.assertEqual('[My Kegbot] New keg tapped: Keg %s: Unknown by Unknown' % keg.id,
-                          msg.subject)
+            msg.subject)
         self.assertEqual(['test@example'], msg.to)
         self.assertEqual('test-from@example', msg.from_email)
 
@@ -153,7 +153,7 @@ http://localhost:1234/account.
 
         msg = mail.outbox[0]
         self.assertEqual('[My Kegbot] Volume low on keg %s (Unknown by Unknown)' % keg.id,
-                          msg.subject)
+            msg.subject)
         self.assertEqual(['test@example'], msg.to)
         self.assertEqual('test-from@example', msg.from_email)
 

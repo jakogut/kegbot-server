@@ -17,7 +17,6 @@
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 from django.conf import settings
 from django.utils.module_loading import import_string
 from django.core.exceptions import ImproperlyConfigured

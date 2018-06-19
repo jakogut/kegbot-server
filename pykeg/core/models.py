@@ -18,7 +18,6 @@
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 import datetime
 import logging
 import os
@@ -1287,7 +1286,7 @@ class SystemEvent(models.Model):
             ret = 'Session {} started by drink {}'.format(self.session.id, self.drink.id)
         elif self.kind == self.SESSION_JOINED:
             ret = 'Session {} joined by {} (drink {})'.format(self.session.id,
-                                                               self.user.username, self.drink.id)
+                self.user.username, self.drink.id)
         elif self.kind == self.KEG_TAPPED:
             ret = 'Keg {} tapped'.format(self.keg.id)
         elif self.kind == self.KEG_VOLUME_LOW:

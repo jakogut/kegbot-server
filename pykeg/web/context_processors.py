@@ -1,6 +1,8 @@
 from django.conf import settings
 
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 
 from pykeg.core import models
 from pykeg.core import util

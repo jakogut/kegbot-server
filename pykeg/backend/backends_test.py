@@ -55,7 +55,7 @@ class BackendsFixtureTestCase(TestCase):
         stats = site.get_stats()
         self.assertEqual(755 - 185, stats['total_pours'])
         self.assertEqual(original_stats['total_volume_ml'] - keg_stats['total_volume_ml'],
-                          stats['total_volume_ml'])
+            stats['total_volume_ml'])
 
 
 @override_settings(KEGBOT_BACKEND='pykeg.core.testutils.TestBackend')
@@ -285,9 +285,9 @@ class BackendsTestCase(TestCase):
                                           photo='foo')
         self.assertEqual('http://example.com:8000/d/{}'.format(drink.id), drink.short_url())
         self.assertEqual('http://example.com:8000/s/{}'.format(drink.session.id),
-                          drink.session.short_url())
+            drink.session.short_url())
 
         start = drink.session.start_time
         datepart = '{}/{}/{}'.format(start.year, start.month, start.day)
         self.assertEqual('http://example.com:8000/sessions/{}/{}'.format(datepart,
-                                                                          drink.session.id), drink.session.full_url())
+            drink.session.id), drink.session.full_url())

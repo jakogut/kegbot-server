@@ -19,7 +19,6 @@
 """High-level interface to Django backend."""
 
 
-
 import datetime
 import logging
 

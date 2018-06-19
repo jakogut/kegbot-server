@@ -21,7 +21,7 @@ DEPENDENCIES = [
     'django-nose',
     'django-redis',
     'django-registration',
-    'Django',
+    'Django==1.11',
     'flake8',
     'foursquare',
     'gunicorn',
@@ -62,8 +62,8 @@ setup(
     ],
     install_requires=DEPENDENCIES,
     dependency_links=[
-        'https://github.com/jakogut/kegbot-api/tarball/master#egg=kegbot-api',
-        'https://github.com/jakogut/kegbot-pyutils/tarball/master#egg=kegbot-pyutils',
+        'https://github.com/jakogut/kegbot-api/tarball/master#egg=kegbot-api-1.2.0',
+        'https://github.com/jakogut/kegbot-pyutils/tarball/master#egg=kegbot-pyutils-0.2',
     ],
     include_package_data=True,
     entry_points={

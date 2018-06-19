@@ -17,6 +17,7 @@
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import functools
 
 from django.utils import timezone
 from kegbot.util import units
@@ -184,10 +185,14 @@ def chart_users_by_volume(stats, *args, **kwargs):
         data.append((label, volume))
 
     def _sort_vol_desc(a, b):
+        # cmp was removed from Python 3.0.1
+        def cmp(a, b):
+            return (a > b) - (a - b)
+
         return cmp(b[1], a[1])
 
     other_vol = 0
-    data.sort(_sort_vol_desc)
+    data.sort(key=functools.cmp_to_key(_sort_vol_desc))
     for username, pints in data[10:]:
         other_vol += pints
     data = data[:10]

@@ -36,7 +36,6 @@ from . import validate_jsonp
 import logging
 import sys
 import traceback
-import types
 
 LOGGER = logging.getLogger(__name__)
 
