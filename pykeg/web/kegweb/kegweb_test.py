@@ -37,18 +37,18 @@ class KegwebTestCase(TransactionTestCase):
     def testBasicEndpoints(self):
         for endpoint in ('/kegs/', '/stats/', '/drinkers/guest/', '/drinkers/guest/sessions/'):
             response = self.client.get(endpoint)
-            self.assertEquals(200, response.status_code)
+            self.assertEqual(200, response.status_code)
 
         for endpoint in ('/sessions/',):
             response = self.client.get(endpoint)
-            self.assertEquals(404, response.status_code)
+            self.assertEqual(404, response.status_code)
 
         b = get_kegbot_backend()
         keg = b.start_keg('kegboard.flow0', beverage_name='Unknown', producer_name='Unknown',
                           beverage_type='beer', style_name='Unknown')
         self.assertIsNotNone(keg)
         response = self.client.get('/kegs/')
-        self.assertEquals(200, response.status_code)
+        self.assertEqual(200, response.status_code)
 
         d = b.record_drink('kegboard.flow0', ticks=100)
         drink_id = d.id
@@ -85,7 +85,7 @@ class KegwebTestCase(TransactionTestCase):
         }
 
         def test_urls(expect_fail, urls=urls):
-            for url, expected_content in urls.iteritems():
+            for url, expected_content in urls.items():
                 response = self.client.get(url)
                 if expect_fail:
                     self.assertNotContains(response, expected_content, status_code=401,
@@ -228,7 +228,7 @@ class KegwebTestCase(TransactionTestCase):
                                         'password2': '1235',
                                         'email': 'test2@example.com',
                                     }, follow=False)
-        print response
+        print(response)
         self.assertContains(response, "The two password fields didn&#39;t match.",
                             status_code=200)
 

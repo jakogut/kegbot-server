@@ -47,8 +47,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Kegbot'
-copyright = u'2014 Bevbot LLC'
+project = 'Kegbot'
+copyright = '2014 Bevbot LLC'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -176,8 +176,8 @@ html_title = 'Kegbot Docs'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-    ('index', 'KegbotDocs.tex', ur'Kegbot Documentation',
-     ur'Bevbot LLC', 'manual'),
+    ('index', 'KegbotDocs.tex', r'Kegbot Documentation',
+     r'Bevbot LLC', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

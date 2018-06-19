@@ -124,7 +124,7 @@ class LoadDemoDataCommand(BaseCommand):
                         d.rotate()
                 self.do_pour(drinker, date, volume_ml, shout, picture_path)
 
-            print 'Demo data loaded.'
+            print('Demo data loaded.')
 
     def do_pour(self, user, when, volume_ml, shout, picture_path):
         be = get_kegbot_backend()
@@ -164,7 +164,7 @@ class LoadDemoDataCommand(BaseCommand):
         pours = []
         minute = 0
 
-        for session_number in xrange(count):
+        for session_number in range(count):
             session = []
             num_drinkers = random.randint(1, len(all_drinkers))
             drinkers = random.sample(all_drinkers, num_drinkers)

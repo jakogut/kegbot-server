@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse
+import urllib.parse
 
 from django.conf import settings
 from django.contrib import messages
@@ -44,7 +44,7 @@ class DemoModeMiddleware(object):
                 return self.get_response(request)
 
         messages.error(request, 'Site is in demo mode; changes were not saved.')
-        path_or_url = urlparse.urlparse(request.META.get('HTTP_REFERER', '')).path
+        path_or_url = urllib.parse.urlparse(request.META.get('HTTP_REFERER', '')).path
         if not path_or_url:
             path_or_url = 'kb-home'
 

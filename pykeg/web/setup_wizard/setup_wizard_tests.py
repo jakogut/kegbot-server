@@ -40,7 +40,7 @@ class SetupWizardTestCase(TransactionTestCase):
                                    status_code=403)
 
         response = self.client.get('/setup/')
-        self.failUnlessEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
     @override_settings(DEBUG=True)
     def test_settings_debug_true(self):
@@ -51,7 +51,7 @@ class SetupWizardTestCase(TransactionTestCase):
             self.assertContains(response, 'Start Setup', status_code=403)
 
         response = self.client.get('/setup/')
-        self.failUnlessEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_setup_not_shown(self):
         """Verify wizard is not shown on set-up site."""
@@ -67,4 +67,4 @@ class SetupWizardTestCase(TransactionTestCase):
             self.assertNotContains(response, 'Start Setup', status_code=200)
 
         response = self.client.get('/setup/')
-        self.failUnlessEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)

@@ -25,7 +25,7 @@ from pykeg.backend.backends import UnknownBaseUrlException
 
 
 class Command(BaseCommand):
-    help = u'Creates a zipfile backup of the current Kegbot system.'
+    help = 'Creates a zipfile backup of the current Kegbot system.'
 
     def add_arguments(self, parser):
         parser.add_argument('--no_media', action='store_true', dest='no_media', default=False,
@@ -38,9 +38,9 @@ class Command(BaseCommand):
         path = location
         if hasattr(storage, 'location'):
             path = os.path.join(storage.location, path)
-        print 'Backup complete!'
-        print 'Path: {}'.format(path)
+        print('Backup complete!')
+        print('Path: {}'.format(path))
         try:
-            print 'URL: {}'.format(storage.url(location))
+            print('URL: {}'.format(storage.url(location)))
         except (NotImplementedError, UnknownBaseUrlException):
             pass

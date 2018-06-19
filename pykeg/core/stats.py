@@ -151,7 +151,7 @@ class StatsBuilder:
         # Use volume_by_session, ensuring our session is captured
         # by injecting a dummy value.
         prev_sessions = previous_stats.get('volume_by_session', {})
-        ret = len(prev_sessions.keys())
+        ret = len(list(prev_sessions.keys()))
         if str(drink.session.id) not in prev_sessions:
             ret += 1
         return ret

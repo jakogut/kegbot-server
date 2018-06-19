@@ -41,7 +41,7 @@ if __name__ == "__main__":
         cmd = sys.argv[1]
         if cmd == 'version':
             # Hack: Django's `version` command cannot be overridden the usual way.
-            print 'kegbot-server {}'.format(get_version())
+            print('kegbot-server {}'.format(get_version()))
             sys.exit(0)
         elif cmd == 'run_gunicorn':
             # run_gunicorn was deprecated upstream.

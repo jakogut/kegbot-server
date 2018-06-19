@@ -25,8 +25,8 @@ from pykeg.backup import backup
 
 
 class Command(BaseCommand):
-    help = u'Restores a zipfile backup of the current Kegbot system.'
-    args = u'<zipfile>'
+    help = 'Restores a zipfile backup of the current Kegbot system.'
+    args = '<zipfile>'
 
     def handle(self, *args, **options):
         if len(args) != 1:

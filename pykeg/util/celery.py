@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 
 """Celery beat scheduler backed by Redis.
 

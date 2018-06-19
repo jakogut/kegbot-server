@@ -67,7 +67,7 @@ logger = logging.getLogger(__name__)
 
 # Whitelist of directories to include from storage backend.
 MEDIA_WHITELIST = [
-    u'pics'
+    'pics'
 ]
 
 # Metadata key names.

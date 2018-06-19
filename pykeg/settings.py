@@ -5,7 +5,7 @@
 
 # --------------------------------------------------------------------------- #
 
-from __future__ import absolute_import
+
 
 # Grab flags for optional modules.
 from pykeg.core.optional_modules import *
@@ -319,7 +319,7 @@ except ImportError:
     msg += 'Tried: ' + ' '.join(importhacks.SEARCH_DIRS) + '\n\n'
     msg += 'Run setup-kegbot.py or set KEGBOT_SETTINGS_DIR to the settings directory.'
     import sys
-    print>>sys.stderr, msg
+    print(msg, file=sys.stderr)
     sys.exit(1)
 
 from pykeg.core.util import get_plugin_template_dirs

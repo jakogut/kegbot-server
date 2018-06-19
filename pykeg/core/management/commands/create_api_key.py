@@ -31,4 +31,4 @@ class Command(BaseCommand):
             raise CommandError('Must specify description')
 
         key = models.ApiKey.objects.create(description=args[0])
-        print key.key
+        print(key.key)

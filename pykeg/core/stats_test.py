@@ -57,7 +57,7 @@ class StatsTestCase(TransactionTestCase):
     def testStuff(self):
         site = models.KegbotSite.get()
         stats = site.get_stats()
-        self.assertEquals(stats, {})
+        self.assertEqual(stats, {})
 
         now = make_datetime(2012, 1, 2, 12, 00)
         self.maxDiff = None
@@ -65,21 +65,21 @@ class StatsTestCase(TransactionTestCase):
         d = self.backend.record_drink('kegboard.flow0', ticks=1, volume_ml=100,
                                       username='user1', pour_time=now)
         expected = util.AttrDict({
-            u'volume_by_year': {u'2012': 100.0},
-            u'total_pours': 1,
-            u'has_guest_pour': False,
-            u'greatest_volume_ml': 100.0,
-            u'registered_drinkers': [u'user1'],
-            u'volume_by_day_of_week': {u'1': 100.0},
-            u'greatest_volume_id': d.id,
-            u'volume_by_drinker': {u'user1': 100.0},
-            u'volume_by_session': {u'1': 100.0},
-            u'last_drink_id': d.id,
-            u'keg_ids': [d.keg.id],
-            u'sessions_count': 1,
-            u'average_volume_ml': 100.0,
-            u'total_volume_ml': 100.0,
-            u'largest_session': {u'session_id': 1, u'volume_ml': 100},
+            'volume_by_year': {'2012': 100.0},
+            'total_pours': 1,
+            'has_guest_pour': False,
+            'greatest_volume_ml': 100.0,
+            'registered_drinkers': ['user1'],
+            'volume_by_day_of_week': {'1': 100.0},
+            'greatest_volume_id': d.id,
+            'volume_by_drinker': {'user1': 100.0},
+            'volume_by_session': {'1': 100.0},
+            'last_drink_id': d.id,
+            'keg_ids': [d.keg.id],
+            'sessions_count': 1,
+            'average_volume_ml': 100.0,
+            'total_volume_ml': 100.0,
+            'largest_session': {'session_id': 1, 'volume_ml': 100},
         })
         stats = site.get_stats()
         self.assertDictEqual(expected, stats)
@@ -91,16 +91,16 @@ class StatsTestCase(TransactionTestCase):
         expected.total_pours = 2
         expected.greatest_volume_ml = 200.0
         expected.greatest_volume_id = d.id
-        expected.registered_drinkers.append(u'user2')
-        expected.volume_by_drinker[u'user2'] = 200.0
+        expected.registered_drinkers.append('user2')
+        expected.volume_by_drinker['user2'] = 200.0
         expected.last_drink_id = d.id
         expected.average_volume_ml = 150.0
         expected.total_volume_ml = 300.0
-        expected.volume_by_day_of_week[u'2'] = 200.0
-        expected.volume_by_year[u'2012'] = 300.0
+        expected.volume_by_day_of_week['2'] = 200.0
+        expected.volume_by_year['2012'] = 300.0
         expected.sessions_count = 2
-        expected.volume_by_session = {u'1': 100.0, u'2': 200.0}
-        expected.largest_session = {u'session_id': 2, u'volume_ml': 200.0}
+        expected.volume_by_session = {'1': 100.0, '2': 200.0}
+        expected.largest_session = {'session_id': 2, 'volume_ml': 200.0}
 
         self.assertDictEqual(expected, stats)
 
@@ -111,15 +111,15 @@ class StatsTestCase(TransactionTestCase):
         expected.total_pours = 3
         expected.greatest_volume_ml = 300.0
         expected.greatest_volume_id = d.id
-        expected.volume_by_drinker[u'user2'] = 500.0
+        expected.volume_by_drinker['user2'] = 500.0
         expected.last_drink_id = d.id
         expected.average_volume_ml = 200.0
         expected.total_volume_ml = 600.0
-        expected.volume_by_day_of_week[u'2'] = 500.0
-        expected.volume_by_year[u'2012'] = 600.0
+        expected.volume_by_day_of_week['2'] = 500.0
+        expected.volume_by_year['2012'] = 600.0
         expected.sessions_count = 2
-        expected.volume_by_session = {u'1': 100.0, u'2': 500.0}
-        expected.largest_session = {u'session_id': 2, u'volume_ml': 500.0}
+        expected.volume_by_session = {'1': 100.0, '2': 500.0}
+        expected.largest_session = {'session_id': 2, 'volume_ml': 500.0}
 
         self.assertDictEqual(expected, stats)
         previous_stats = copy.copy(stats)
@@ -155,24 +155,24 @@ class StatsTestCase(TransactionTestCase):
                 pour_time=now)
             drinks.append(d)
 
-        self.assertEquals(600, self.users[0].get_stats().total_volume_ml)
-        self.assertEquals(200, self.users[1].get_stats().total_volume_ml)
-        self.assertEquals(200, self.users[2].get_stats().total_volume_ml)
+        self.assertEqual(600, self.users[0].get_stats().total_volume_ml)
+        self.assertEqual(200, self.users[1].get_stats().total_volume_ml)
+        self.assertEqual(200, self.users[2].get_stats().total_volume_ml)
 
-        self.assertEquals(1000, models.KegbotSite.get().get_stats().total_volume_ml)
+        self.assertEqual(1000, models.KegbotSite.get().get_stats().total_volume_ml)
 
         self.backend.cancel_drink(drinks[0])
-        self.assertEquals(500, self.users[0].get_stats().total_volume_ml)
-        self.assertEquals(200, self.users[1].get_stats().total_volume_ml)
-        self.assertEquals(200, self.users[2].get_stats().total_volume_ml)
-        self.assertEquals(900, models.KegbotSite.get().get_stats().total_volume_ml)
+        self.assertEqual(500, self.users[0].get_stats().total_volume_ml)
+        self.assertEqual(200, self.users[1].get_stats().total_volume_ml)
+        self.assertEqual(200, self.users[2].get_stats().total_volume_ml)
+        self.assertEqual(900, models.KegbotSite.get().get_stats().total_volume_ml)
 
         self.backend.assign_drink(drinks[1], self.users[0])
-        self.assertEquals(700, self.users[0].get_stats().total_volume_ml)
-        self.assertEquals({}, self.users[1].get_stats())
-        self.assertEquals(200, self.users[2].get_stats().total_volume_ml)
-        self.assertEquals(900, models.KegbotSite.get().get_stats().total_volume_ml)
-        self.assertEquals(900, drinks[1].session.get_stats().total_volume_ml)
+        self.assertEqual(700, self.users[0].get_stats().total_volume_ml)
+        self.assertEqual({}, self.users[1].get_stats())
+        self.assertEqual(200, self.users[2].get_stats().total_volume_ml)
+        self.assertEqual(900, models.KegbotSite.get().get_stats().total_volume_ml)
+        self.assertEqual(900, drinks[1].session.get_stats().total_volume_ml)
 
         # Start a new session.
         now = make_datetime(2013, 1, 2, 12, 00)
@@ -185,11 +185,11 @@ class StatsTestCase(TransactionTestCase):
                 pour_time=now)
             drinks.append(d)
 
-        self.assertEquals(1300, self.users[0].get_stats().total_volume_ml)
-        self.assertEquals(200, self.users[1].get_stats().total_volume_ml)
-        self.assertEquals(400, self.users[2].get_stats().total_volume_ml)
-        self.assertEquals(1900, models.KegbotSite.get().get_stats().total_volume_ml)
-        self.assertEquals(1000, drinks[-1].session.get_stats().total_volume_ml)
+        self.assertEqual(1300, self.users[0].get_stats().total_volume_ml)
+        self.assertEqual(200, self.users[1].get_stats().total_volume_ml)
+        self.assertEqual(400, self.users[2].get_stats().total_volume_ml)
+        self.assertEqual(1900, models.KegbotSite.get().get_stats().total_volume_ml)
+        self.assertEqual(1000, drinks[-1].session.get_stats().total_volume_ml)
 
         # Delete all stats for some intermediate drinks.
         models.Stats.objects.filter(drink=drinks[-1]).delete()
@@ -200,8 +200,8 @@ class StatsTestCase(TransactionTestCase):
         drinks.append(d)
 
         # Intermediate stats are generated.
-        self.assertEquals(3011, models.KegbotSite.get().get_stats().total_volume_ml)
-        self.assertEquals(2111, drinks[-1].session.get_stats().total_volume_ml)
+        self.assertEqual(3011, models.KegbotSite.get().get_stats().total_volume_ml)
+        self.assertEqual(2111, drinks[-1].session.get_stats().total_volume_ml)
 
     def test_timezone_awareness(self):
         site = models.KegbotSite.get()
@@ -227,10 +227,10 @@ class StatsTestCase(TransactionTestCase):
                 volume_ml=volume_ml,
                 pour_time=now)
             drinks.append(d)
-            self.assertEquals('US/Pacific', d.session.timezone)
+            self.assertEqual('US/Pacific', d.session.timezone)
 
         stats = site.get_stats()
         # Assert that stats are recorded for Sunday (day = 0) rather than
         # UTC's monday (day = 1).
-        self.assertEquals({'0': 1000.0}, stats.volume_by_day_of_week)
-        self.assertEquals(600, self.users[0].get_stats().total_volume_ml)
+        self.assertEqual({'0': 1000.0}, stats.volume_by_day_of_week)
+        self.assertEqual(600, self.users[0].get_stats().total_volume_ml)

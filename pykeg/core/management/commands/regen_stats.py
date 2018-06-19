@@ -25,7 +25,7 @@ from pykeg.core.management.commands.common import progbar
 
 
 class Command(BaseCommand):
-    help = u'Regenerate all cached stats.'
+    help = 'Regenerate all cached stats.'
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -39,5 +39,5 @@ class Command(BaseCommand):
         stats.invalidate_all()
         stats.rebuild_from_id(0, cb=cb)
 
-        print ''
-        print 'done!'
+        print('')
+        print('done!')

@@ -8,7 +8,7 @@ kegerator.  For more information and documentation, see http://kegbot.org/
 
 from setuptools import setup, find_packages
 
-VERSION = '1.2.3'
+VERSION = '1.3.0'
 DOCLINES = __doc__.split('\n')
 
 SHORT_DESCRIPTION = DOCLINES[0]
@@ -31,7 +31,7 @@ DEPENDENCIES = [
     'kegbot-api',
     'kegbot-pyutils',
     'mock',
-    'MySQL-python',
+    'PyMySQL',
     'pillow',
     'protobuf',
     'python-gflags',
@@ -40,7 +40,7 @@ DEPENDENCIES = [
     'rednose',
     'requests',
     'requests-mock',
-    'requests_oauthlib',
+    'requests-oauthlib',
     'tweepy',
     'vcrpy',
     'whitenoise',
@@ -62,7 +62,8 @@ setup(
     ],
     install_requires=DEPENDENCIES,
     dependency_links=[
-        'https://github.com/rem/python-protobuf/tarball/master#egg=protobuf-2.4.1',
+        'https://github.com/jakogut/kegbot-api/tarball/master#egg=kegbot-api',
+        'https://github.com/jakogut/kegbot-pyutils/tarball/master#egg=kegbot-pyutils',
     ],
     include_package_data=True,
     entry_points={

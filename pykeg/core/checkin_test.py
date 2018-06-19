@@ -50,11 +50,11 @@ class CheckinTestCase(TransactionTestCase):
             mock_post.assert_called_with('http://example.com/checkin',
                                          headers={'User-Agent': 'KegbotServer/%s' % version},
                                          data={
-                                             'reg_id': u'original-regid',
+                                             'reg_id': 'original-regid',
                                              'product': 'test-product',
                                              'version': version,
                                          },
                                          timeout=1.23)
 
         site = models.KegbotSite.get()
-        self.assertEquals('new-regid', site.registration_id)
+        self.assertEqual('new-regid', site.registration_id)

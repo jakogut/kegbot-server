@@ -41,12 +41,12 @@ MINIMUM_INSTALLED_VERSION = StrictVersion('1.1.1')
 def run(cmd, args=[]):
     cmdname = cmd.__module__.split('.')[-1]
     arg_str = ' '.join('%s' % a for a in args)
-    print '--- Running command: %s %s' % (cmdname, arg_str)
+    print('--- Running command: %s %s' % (cmdname, arg_str))
     cmd.run_from_argv([sys.argv[0], cmdname] + args)
 
 
 class Command(BaseCommand):
-    help = u'Perform post-upgrade tasks.'
+    help = 'Perform post-upgrade tasks.'
 
     def add_arguments(self, parser):
         parser.add_argument('--force', action='store_true', dest='force', default=False,
@@ -62,30 +62,30 @@ class Command(BaseCommand):
         force = options.get('force')
 
         if installed_version is None:
-            print 'Kegbot is not installed; run setup-kegbot.py first.'
+            print('Kegbot is not installed; run setup-kegbot.py first.')
             sys.exit(1)
 
         if installed_version == app_version and not force:
-            print 'Version {} already installed.'.format(installed_version)
+            print('Version {} already installed.'.format(installed_version))
             return
 
         if installed_version > app_version:
-            print 'Installed version {} is newer than app version {}'.format(
-                installed_version, app_version)
+            print('Installed version {} is newer than app version {}'.format(
+                installed_version, app_version))
             sys.exit(1)
 
         if installed_version < MINIMUM_INSTALLED_VERSION:
-            print ''
-            print 'ERROR: This version of Kegbot can only upgrade systems running on version'
-            print 'v{} or newer.  Please install Kegbot v{} and run `kegbot upgrade` again.'.format(
-                MINIMUM_INSTALLED_VERSION, MINIMUM_INSTALLED_VERSION)
-            print '(Existing version: {})'.format(installed_version)
-            print ''
-            print 'More help: https://github.com/Kegbot/kegbot-server/wiki/Upgrading-Old-Versions'
-            print ''
+            print('')
+            print('ERROR: This version of Kegbot can only upgrade systems running on version')
+            print('v{} or newer.  Please install Kegbot v{} and run `kegbot upgrade` again.'.format(
+                MINIMUM_INSTALLED_VERSION, MINIMUM_INSTALLED_VERSION))
+            print('(Existing version: {})'.format(installed_version))
+            print('')
+            print('More help: https://github.com/Kegbot/kegbot-server/wiki/Upgrading-Old-Versions')
+            print('')
             sys.exit(1)
 
-        print 'Upgrading from {} to {}'.format(installed_version, app_version)
+        print('Upgrading from {} to {}'.format(installed_version, app_version))
         self.do_version_upgrades(installed_version)
 
         run(migrate.Command(), args=['--noinput', '-v', '0'])
@@ -106,9 +106,9 @@ class Command(BaseCommand):
         except (checkin.CheckinError, Exception):
             pass
 
-        print ''
-        print 'Upgrade complete!'
+        print('')
+        print('Upgrade complete!')
 
     def do_version_upgrades(self, installed_version):
         if installed_version.version < (1, 2, 0):
-            print 'Upgrading from v1.1.x'
+            print('Upgrading from v1.1.x')

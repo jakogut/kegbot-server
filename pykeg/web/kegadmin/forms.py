@@ -117,24 +117,24 @@ class TapForm(forms.ModelForm):
     class FlowMeterModelChoiceField(forms.ModelChoiceField):
         def label_from_instance(self, meter):
             if meter.tap:
-                return u'{} (connected to {})'.format(meter, meter.tap.name)
+                return '{} (connected to {})'.format(meter, meter.tap.name)
             else:
-                return unicode(meter)
+                return str(meter)
 
     class FlowToggleModelChoiceField(forms.ModelChoiceField):
         def label_from_instance(self, toggle):
             if toggle.tap:
-                return u'{} (connected to {})'.format(toggle, toggle.tap.name)
+                return '{} (connected to {})'.format(toggle, toggle.tap.name)
             else:
-                return unicode(toggle)
+                return str(toggle)
 
     class ThermoSensorModelChoiceField(forms.ModelChoiceField):
         def label_from_instance(self, sensor):
             last_log = sensor.LastLog()
             if last_log:
-                return u'{} (Last report: {})'.format(sensor, naturaltime(last_log.time))
+                return '{} (Last report: {})'.format(sensor, naturaltime(last_log.time))
             else:
-                return unicode(sensor)
+                return str(sensor)
 
     meter = FlowMeterModelChoiceField(
         queryset=ALL_METERS,

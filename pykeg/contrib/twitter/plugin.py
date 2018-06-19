@@ -46,7 +46,7 @@ KEY_SITE_SETTINGS = 'site_settings'
 TWITTER_LINK_LEN = 22
 TWEET_MAX_LEN = 140
 TWEET_MAX_LEN_WITH_URL = TWEET_MAX_LEN - TWITTER_LINK_LEN - 1
-TRUNCATE_STR = u'\u2026'
+TRUNCATE_STR = '\u2026'
 
 
 def send_tweet(api, contents):
@@ -59,7 +59,7 @@ def truncate_tweet(tweet, max_len=TWEET_MAX_LEN, truncate_str=TRUNCATE_STR):
         return tweet
     words = tweet.strip().split()
     while True:
-        tweet = u' '.join(words)
+        tweet = ' '.join(words)
         candidate = normalize('NFC', tweet + truncate_str)
         if not tweet or len(candidate) <= max_len:
             return candidate

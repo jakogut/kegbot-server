@@ -24,7 +24,7 @@ This program is intended for configuring a fresh install of Kegbot.  It cannot
 be used on an active Kegbot install.
 """
 
-from __future__ import absolute_import
+
 
 import os
 import sys
@@ -162,10 +162,10 @@ class SetupStep(object):
         if interactive:
             docs = self.get_docs()
             if docs:
-                print '-' * 80
-                print '\n'.join(docs.splitlines()[2:])
-                print ''
-                print ''
+                print('-' * 80)
+                print('\n'.join(docs.splitlines()[2:]))
+                print('')
+                print('')
 
     def validate(self, ctx):
         """Validates user input.
@@ -204,7 +204,7 @@ class ConfigurationSetupStep(SetupStep):
 
         prompt_text = '%s%s%s: ' % (prompt, choices_text, default_text)
 
-        value = raw_input(prompt_text)
+        value = input(prompt_text)
         if value == '':
             return default
         return value
@@ -417,7 +417,7 @@ class SetupApp(app.App):
     def print_error(self, msg):
         msg = 'ERROR: {}'.format(msg)
         msg = textwrap.fill(msg, 72)
-        print>>sys.stderr, msg
+        print(msg, file=sys.stderr)
 
     def build(self, ctx):
         for step in STEPS:
@@ -439,34 +439,34 @@ class SetupApp(app.App):
                 try:
                     step.get(interactive=True, ctx=ctx)
                     step.validate(ctx)
-                    print ''
-                    print ''
+                    print('')
+                    print('')
                     break
                 except KeyboardInterrupt as e:
-                    print ''
+                    print('')
                     sys.exit(1)
                 except FatalError as e:
-                    print ''
+                    print('')
                     self.print_error(e)
                     sys.exit(1)
                 except ValueError as e:
-                    print ''
-                    print ''
-                    print ''
+                    print('')
+                    print('')
+                    print('')
                     self.print_error(e)
 
     def finish_setup(self, ctx):
-        print ''
-        print 'Generated configuration:'
+        print('')
+        print('Generated configuration:')
         for key in sorted(SETTINGS_NAMES):
-            print '  %s = %s' % (key, repr(ctx.get(key)))
-        print ''
+            print('  %s = %s' % (key, repr(ctx.get(key))))
+        print('')
 
         for step in STEPS:
             step.save(ctx)
 
         settings_file = os.path.join(ctx['SETTINGS_DIR'], 'local_settings.py')
-        print 'Writing settings to %s ..' % settings_file
+        print('Writing settings to %s ..' % settings_file)
 
         if os.path.exists(settings_file) and not FLAGS.replace_settings:
             raise ValueError('%s exists and --replace_settings was not given.' % settings_file)
@@ -478,17 +478,17 @@ class SetupApp(app.App):
                 outfd.write('%s = %s\n\n' % (key, repr(ctx[key])))
         outfd.close()
 
-        print 'Finishing setup ...'
+        print('Finishing setup ...')
         settings_dir = os.path.expanduser(os.path.dirname(settings_file))
         env_str = ''
         if settings_dir not in [os.path.expanduser(p) for p in SettingsDir.CHOICES]:
             env_str = 'KEGBOT_SETTINGS_DIR=%s ' % settings_dir
-            print ''
-            print 'Notice: You are using a non-standard settings directory (%s)' % settings_dir
-            print 'You must export KEGBOT_SETTINGS_DIR in order for Kegbot to use it:'
-            print ''
-            print '  export %s' % env_str
-            print ''
+            print('')
+            print('Notice: You are using a non-standard settings directory (%s)' % settings_dir)
+            print('You must export KEGBOT_SETTINGS_DIR in order for Kegbot to use it:')
+            print('')
+            print('  export %s' % env_str)
+            print('')
 
             # Set it so load_existing works.
             os.environ['KEGBOT_SETTINGS_DIR'] = settings_dir
@@ -503,31 +503,31 @@ class SetupApp(app.App):
             raise ValueError('Imported settings does not match: imported=%s '
                              'expected=%s' % (existing.__file__, settings_file))
 
-        self.run_command('kegbot syncdb --noinput -v 0')
+        self.run_command('kegbot migrate --noinput -v 0')
 
         if FLAGS.interactive:
             try:
                 self.run_command('kegbot collectstatic --noinput -v 0')
             except FatalError as e:
-                print 'WARNING: Collecting static files failed: %s' % e
-                print ''
-                print 'Try again with "kegbot collectstatic"'
+                print('WARNING: Collecting static files failed: %s' % e)
+                print('')
+                print('Try again with "kegbot collectstatic"')
         else:
             self.run_command('kegbot collectstatic --noinput')
 
-        print ''
-        print 'Done!'
-        print ''
-        print 'You may now run the built-in web server:'
-        print '  $ %skegbot runserver' % env_str
+        print('')
+        print('Done!')
+        print('')
+        print('You may now run the built-in web server:')
+        print('  $ %skegbot runserver' % env_str)
 
     def run_command(self, s, allow_fail=False):
-        print 'Running command: %s' % s
+        print('Running command: %s' % s)
         ret = subprocess.call(s.split())
         if ret != 0:
             msg = 'Command returned non-zero exit status (%s)' % ret
             if allow_fail:
-                print msg
+                print(msg)
             else:
                 raise FatalError(msg)
 

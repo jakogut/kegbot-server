@@ -104,7 +104,7 @@ class RedisLogRecord(logging.LogRecord):
             'level': levelAsString(lvl),
             'filename': fn,
             'line_no': self.lineno,
-            'msg': unicode(msg),
+            'msg': str(msg),
             'args': list(args),
             'time': datetime.datetime.utcnow(),
             'username': self.username,
@@ -126,7 +126,7 @@ class RedisLogRecord(logging.LogRecord):
 
 
 class RedisLogger(logging.getLoggerClass()):
-    def makeRecord(self, name, lvl, fn, lno, msg, args, exc_info, func=None, extra=None):
+    def makeRecord(self, name, lvl, fn, lno, msg, args, exc_info, func=None, extra=None, sinfo=None, **kwargs):
         record = RedisLogRecord(name, lvl, fn, lno, msg, args, exc_info, func=None)
 
         if extra:

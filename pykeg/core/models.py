@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import absolute_import
+
 
 import datetime
 import logging
@@ -25,7 +25,7 @@ import os
 import pytz
 import random
 import re
-import urlparse
+import urllib.parse
 from uuid import uuid4
 from distutils.version import StrictVersion
 
@@ -335,7 +335,7 @@ class KegbotSite(models.Model):
 
     def full_url(self, path):
         """Returns an absolute URL to the specified path."""
-        return urlparse.urljoin(self.base_url(), path)
+        return urllib.parse.urljoin(self.base_url(), path)
 
     def reverse_full(self, *args, **kwargs):
         """Returns an absolute URL to the path reversed by parameters."""
@@ -519,7 +519,7 @@ class Beverage(models.Model):
         ordering = ('name',)
 
     def __unicode__(self):
-        return u'{} by {}'.format(self.name, self.producer)
+        return '{} by {}'.format(self.name, self.producer)
 
 
 class KegTap(models.Model):
@@ -544,7 +544,7 @@ class KegTap(models.Model):
         default=0, help_text='Position relative to other taps when sorting (0=first).')
 
     def __unicode__(self):
-        return u'{}: {}'.format(self.name, self.current_keg)
+        return '{}: {}'.format(self.name, self.current_keg)
 
     def is_active(self):
         """Returns True if the tap has an active Keg."""
@@ -592,7 +592,7 @@ class Controller(models.Model):
                                      help_text='Serial number (optional).')
 
     def __unicode__(self):
-        return u'Controller: {}'.format(self.name)
+        return 'Controller: {}'.format(self.name)
 
 
 class FlowMeter(models.Model):
@@ -661,10 +661,10 @@ class FlowToggle(models.Model):
                                help_text='Tap to which this toggle is currently bound.')
 
     def toggle_name(self):
-        return u'{}.{}'.format(self.controller.name, self.port_name)
+        return '{}.{}'.format(self.controller.name, self.port_name)
 
     def __unicode__(self):
-        return u'{} (tap: {})'.format(self.toggle_name(), self.tap)
+        return '{} (tap: {})'.format(self.toggle_name(), self.tap)
 
     @classmethod
     def get_or_create_from_toggle_name(cls, toggle_name):
@@ -714,7 +714,7 @@ class Keg(models.Model):
                              help_text='Beverage in this Keg.')
     keg_type = models.CharField(
         max_length=32,
-        choices=keg_sizes.DESCRIPTIONS.items(),
+        choices=list(keg_sizes.DESCRIPTIONS.items()),
         default=keg_sizes.HALF_BARREL,
         help_text='Keg container type, used to initialize keg\'s full volume')
     served_volume_ml = models.FloatField(default=0, editable=False,
@@ -800,8 +800,8 @@ class Keg(models.Model):
         kind = 'thumb' if thumbnail else 'full'
         img_path = 'images/keg/{}/keg-srm14-{}.png'.format(kind, level)
 
-        url = urlparse.urljoin(settings.STATIC_URL, img_path)
-        if not urlparse.urlparse(url).scheme:
+        url = urllib.parse.urljoin(settings.STATIC_URL, img_path)
+        if not urllib.parse.urlparse(url).scheme:
             url = KegbotSite.get().full_url(url)
         return url
 
@@ -822,7 +822,7 @@ class Keg(models.Model):
             return []
         ret = []
         entries = stats.get('volume_by_drinker', {})
-        for username, vol in entries.iteritems():
+        for username, vol in entries.items():
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
@@ -832,7 +832,7 @@ class Keg(models.Model):
         return ret
 
     def __unicode__(self):
-        return u'Keg #{} - {}'.format(self.id, self.type)
+        return 'Keg #{} - {}'.format(self.id, self.type)
 
 
 def _keg_pre_save(sender, instance, **kwargs):
@@ -952,9 +952,9 @@ class AuthenticationToken(models.Model):
         elif auth_device == 'core.onewire':
             auth_device = 'OneWire'
 
-        ret = u'{} {}'.format(auth_device, self.token_value)
+        ret = '{} {}'.format(auth_device, self.token_value)
         if self.nice_name:
-            ret += u' ({})'.format(self.nice_name)
+            ret += ' ({})'.format(self.nice_name)
         return ret
 
     def get_auth_device(self):
@@ -1150,7 +1150,7 @@ class ThermoSensor(models.Model):
 
     def __unicode__(self):
         if self.nice_name:
-            return u'{} ({})'.format(self.nice_name, self.raw_name)
+            return '{} ({})'.format(self.nice_name, self.raw_name)
         return self.raw_name
 
     def LastLog(self):
@@ -1171,7 +1171,7 @@ class Thermolog(models.Model):
     time = models.DateTimeField()
 
     def __unicode__(self):
-        return u'%.2f C / %.2f F [%s]' % (self.TempC(), self.TempF(), self.time)
+        return '%.2f C / %.2f F [%s]' % (self.TempC(), self.TempF(), self.time)
 
     def TempC(self):
         return self.temp
@@ -1225,7 +1225,7 @@ class Stats(models.Model):
         orig = stats.get('volume_by_drinker', util.AttrDict())
         if orig:
             stats['volume_by_drinker'] = util.AttrDict(
-                (safe_get_user(pk).username, val) for pk, val in orig.iteritems() if safe_get_user(pk))
+                (safe_get_user(pk).username, val) for pk, val in orig.items() if safe_get_user(pk))
 
     @classmethod
     def get_latest_for_view(cls, user=None, keg=None, session=None):
@@ -1282,21 +1282,21 @@ class SystemEvent(models.Model):
 
     def __unicode__(self):
         if self.kind == self.DRINK_POURED:
-            ret = u'Drink {} poured'.format(self.drink.id)
+            ret = 'Drink {} poured'.format(self.drink.id)
         elif self.kind == self.SESSION_STARTED:
-            ret = u'Session {} started by drink {}'.format(self.session.id, self.drink.id)
+            ret = 'Session {} started by drink {}'.format(self.session.id, self.drink.id)
         elif self.kind == self.SESSION_JOINED:
-            ret = u'Session {} joined by {} (drink {})'.format(self.session.id,
+            ret = 'Session {} joined by {} (drink {})'.format(self.session.id,
                                                                self.user.username, self.drink.id)
         elif self.kind == self.KEG_TAPPED:
-            ret = u'Keg {} tapped'.format(self.keg.id)
+            ret = 'Keg {} tapped'.format(self.keg.id)
         elif self.kind == self.KEG_VOLUME_LOW:
-            ret = u'Keg {} volume low'.format(self.keg.id)
+            ret = 'Keg {} volume low'.format(self.keg.id)
         elif self.kind == self.KEG_ENDED:
-            ret = u'Keg {} ended'.format(self.keg.id)
+            ret = 'Keg {} ended'.format(self.keg.id)
         else:
-            ret = u'Unknown event type ({})'.format(self.kind)
-        return u'Event {}: {}'.format(self.id, ret)
+            ret = 'Unknown event type ({})'.format(self.kind)
+        return 'Event {}: {}'.format(self.id, ret)
 
     @classmethod
     def build_events_for_keg(cls, keg):
@@ -1415,16 +1415,16 @@ class Picture(models.Model):
                                 help_text='Session this picture was taken with, if any.')
 
     def __unicode__(self):
-        return u'Picture: {}'.format(self.image)
+        return 'Picture: {}'.format(self.image)
 
     def get_caption(self):
         if self.caption:
             return self.caption
         elif self.drink:
             if self.user:
-                return u'{} pouring drink {}'.format(self.user.username, self.drink.id)
+                return '{} pouring drink {}'.format(self.user.username, self.drink.id)
             else:
-                return u'An unknown drinker pouring drink {}'.format(self.drink.id)
+                return 'An unknown drinker pouring drink {}'.format(self.drink.id)
         return ''
 
     def erase_and_delete(self):

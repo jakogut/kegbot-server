@@ -46,4 +46,4 @@ class Command(BaseCommand):
             user.username = to_username
             user.save()
 
-        print '"{}" has been renamed "{}"'.format(from_username, to_username)
+        print('"{}" has been renamed "{}"'.format(from_username, to_username))

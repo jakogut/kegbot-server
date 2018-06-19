@@ -23,7 +23,7 @@ from pykeg.core.management.commands.common import progbar
 
 
 class Command(BaseCommand):
-    help = u'Regenerate all system events.'
+    help = 'Regenerate all system events.'
 
     def handle(self, *args, **options):
         events = models.SystemEvent.objects.all()
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         progbar('clear events', 0, num_events)
         events.delete()
         progbar('clear events', num_events, num_events)
-        print ''
+        print('')
 
         pos = 0
         drinks = models.Drink.objects.all()
@@ -40,6 +40,6 @@ class Command(BaseCommand):
             pos += 1
             progbar('create new events', pos, count)
             models.SystemEvent.build_events_for_drink(d)
-        print ''
+        print('')
 
-        print 'done!'
+        print('done!')

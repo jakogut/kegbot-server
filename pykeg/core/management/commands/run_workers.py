@@ -23,7 +23,7 @@ from pykeg.core.management.commands.common import RunnerCommand
 
 
 class Command(RunnerCommand):
-    help = u'Runs background task queue workers.'
+    help = 'Runs background task queue workers.'
     pidfile_name = 'kegbot_run_workers.pid'
 
     def get_commands(self, options):
