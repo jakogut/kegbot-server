@@ -19,6 +19,7 @@
 
 
 import datetime
+import json
 import logging
 import os
 import pytz
@@ -59,7 +60,7 @@ from kegbot.util import kbjson
 from kegbot.util import units
 from kegbot.util import util
 
-from pykeg.core.jsonfield import JSONField
+from django.contrib.postgres.fields import JSONField
 from django.utils.translation import ugettext_lazy as _
 
 """Django models definition for the kegbot database."""
@@ -1193,7 +1194,7 @@ class Stats(models.Model):
     See stats.generate(..) for generation details.
     """
     time = models.DateTimeField(default=timezone.now)
-    stats = JSONField(dump_kwargs={'cls': kbjson.JSONEncoder})
+    stats = JSONField(encoder=kbjson.JSONEncoder)
     drink = models.ForeignKey(Drink)
 
     is_first = models.BooleanField(default=False,
@@ -1216,6 +1217,7 @@ class Stats(models.Model):
                 return User.objects.get(pk=pk)
             except (User.DoesNotExist, ValueError):
                 return None
+
         orig = stats.get('registered_drinkers', [])
         if orig:
             stats['registered_drinkers'] = [
@@ -1236,6 +1238,10 @@ class Stats(models.Model):
             stats = cls.objects.filter(user=user, keg=keg, session=session).order_by('-id')[0].stats
         except IndexError:
             stats = {}
+
+        if isinstance(stats, str):
+            stats = json.loads(stats)
+
         cls.apply_usernames(stats)
         return util.AttrDict(stats)
 
