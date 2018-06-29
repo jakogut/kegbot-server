@@ -77,7 +77,7 @@ def dashboard(request):
             r = redis.StrictRedis.from_url(settings.BROKER_URL)
             r.ping()
         except redis.RedisError as e:
-            context['redis_error'] = e.message if e.message else "Unknown error."
+            context['redis_error'] = str(e) or "Unknown error."
 
     last_checkin_time, last_checkin = checkin.get_last_checkin()
     context['last_checkin_time'] = last_checkin_time
