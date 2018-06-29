@@ -70,7 +70,7 @@ class LinkExpiredException(Exception):
 
 def _build_code(size=DEFAULT_CODE_SIZE):
     code = ''.join(random.choice(CODE_LETTERS) for i in range(size))
-    code = '{}-{}'.format(code[:(size / 2)], code[(size / 2):])
+    code = '{}-{}'.format(code[:int(size / 2)], code[int(size / 2):])
     return code
 
 
