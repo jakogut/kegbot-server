@@ -255,7 +255,7 @@ class ApiClientTestCase(BaseApiTestCase):
         self.assertContains(response, 'Choose a Password', status_code=200)
 
     def test_pictures(self):
-        image_data = open(get_filename('test_image_800x600.png'))
+        image_data = open(get_filename('test_image_800x600.png'), 'rb')
         response, data = self.post(
             'pictures/', data={'photo': image_data}, HTTP_X_KEGBOT_API_KEY=self.apikey.key)
         self.assertEqual(data.meta.result, 'ok')
