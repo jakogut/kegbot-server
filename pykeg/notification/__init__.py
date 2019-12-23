@@ -57,9 +57,8 @@ def handle_single_event(event, backends):
     from pykeg.core import models as core_models
     kind = event.kind
     logger.info('Processing event: %s' % event.kind)
-
     for backend in backends:
-        backend_name = str(backend.__class__)
+        backend_name = f'{backend.__class__.__module__}.{backend.__class__.__name__}'
         prefs = core_models.NotificationSettings.objects.filter(backend=backend_name)
 
         if kind == event.KEG_TAPPED:
