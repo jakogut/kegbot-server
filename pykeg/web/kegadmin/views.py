@@ -678,11 +678,11 @@ def drink_list(request):
             if len(delete_ids) == 1:
                 messages.success(request, 'Drink ' + delete_ids[0] + ' has been deleted.')
             elif len(delete_ids) == 2:
-                messages.success(request, 'Drinks ' + ' and '.join(delete_ids) +
-                                 ' have been deleted.')
+                messages.success(request, 'Drinks ' + ' and '.join(delete_ids)
+                        + ' have been deleted.')
             else:
-                messages.success(request, 'Drinks ' + ', '.join(delete_ids[:-1]) + ', and ' +
-                                 delete_ids[-1] + ' have been deleted.')
+                messages.success(request, 'Drinks ' + ', '.join(delete_ids[:-1]) + ', and '
+                        + delete_ids[-1] + ' have been deleted.')
 
     context = {}
     drinks = models.Drink.objects.all().order_by('-time')

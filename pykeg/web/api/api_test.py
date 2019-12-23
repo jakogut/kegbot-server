@@ -472,8 +472,8 @@ class ApiClientTestCase(BaseApiTestCase):
         # Delete controller
         response, data = self.delete('controllers/' + str(new_controller_id))
         self.assertEqual(response.status_code, 401)
-        response, data = self.delete('controllers/' +
-                                     str(new_controller_id), HTTP_X_KEGBOT_API_KEY=self.apikey.key)
+        response, data = self.delete('controllers/'
+                + str(new_controller_id), HTTP_X_KEGBOT_API_KEY=self.apikey.key)
         self.assertEqual(response.status_code, 200)
         response, data = self.get('controllers/' + str(new_controller_id),
                                   HTTP_X_KEGBOT_API_KEY=self.apikey.key)
@@ -567,8 +567,8 @@ class ApiClientTestCase(BaseApiTestCase):
         # Delete toggle.
         response, data = self.delete('flow-toggles/' + str(new_toggle_id))
         self.assertEqual(response.status_code, 401)
-        response, data = self.delete('flow-toggles/' +
-                                     str(new_toggle_id), HTTP_X_KEGBOT_API_KEY=self.apikey.key)
+        response, data = self.delete('flow-toggles/'
+                + str(new_toggle_id), HTTP_X_KEGBOT_API_KEY=self.apikey.key)
         self.assertEqual(response.status_code, 200)
         response, data = self.get('flow-toggles/' + str(new_toggle_id),
                                   HTTP_X_KEGBOT_API_KEY=self.apikey.key)

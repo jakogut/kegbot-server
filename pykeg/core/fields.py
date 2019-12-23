@@ -267,4 +267,4 @@ else:
             [],
             {},
         ),
-    ], ["^pykeg\.core\.fields\.CountryField"])
+    ], [r"^pykeg\.core\.fields\.CountryField"])
