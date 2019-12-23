@@ -20,7 +20,7 @@ DEPENDENCIES = [
     'django-imagekit',
     'django-nose',
     'django-redis',
-    'django-registration',
+    'django-registration-redux',
     'Django==1.11',
     'flake8',
     'foursquare',
