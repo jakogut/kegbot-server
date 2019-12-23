@@ -254,10 +254,9 @@ def _build_single_view(drink, view, prior_stats=None):
             # depth in certain cases.
             for prior_drink in prior_drinks_in_view:
                 try:
-                    prior_stats = util.AttrDict(
-                        models.Stats.objects.get(drink=prior_drink, user=view.user,
-                                                 session=view.session, keg=view.keg).stats
-                    )
+                    stats = models.Stats.objects.get(drink=prior_drink, user=view.user,
+                                                     session=view.session, keg=view.keg).stats
+                    prior_stats = util.AttrDict(stats)
                     break
                 except models.Stats.DoesNotExist:
                     build_list.insert(0, prior_drink)

@@ -1210,6 +1210,14 @@ class Stats(models.Model):
         unique_together = ('drink', 'user', 'keg', 'session')
 
     @classmethod
+    def from_db(cls, db, field_names, values):
+        instance = super().from_db(db, field_names, values)
+        if isinstance(instance.stats, str):
+            _loaded_values = dict(zip(field_names, values))
+            instance.stats = json.loads(_loaded_values['stats'])
+        return instance
+
+    @classmethod
     def apply_usernames(cls, stats):
         """Given a stats dictionary, translate numeric user ids to usernames."""
         def safe_get_user(pk):
