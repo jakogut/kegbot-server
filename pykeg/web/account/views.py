@@ -25,13 +25,12 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
-from django.contrib.auth.views import password_change as password_change_orig
-from django.contrib.auth.views import password_change_done as password_change_done_orig
+from django.contrib.auth.views import PasswordChangeView as DjangoPasswordChangeView
+from django.contrib.auth.views import PasswordChangeDoneView as DjangoPasswordChangeDoneView
 
 from pykeg.core import models
 from pykeg.util import email
@@ -198,14 +197,12 @@ def regenerate_api_key(request):
     return redirect('kb-account-main')
 
 
-def password_change(request, *args, **kwargs):
-    kwargs['template_name'] = 'account/password_change.html'
-    kwargs['post_change_redirect'] = reverse('password_change_done')
-    return password_change_orig(request, *args, **kwargs)
+class PasswordChangeView(DjangoPasswordChangeView):
+    template_name = 'account/password_change.html'
 
 
-def password_change_done(request):
-    return password_change_done_orig(request, 'account/password_change_done.html')
+class PasswordChangeDoneView(DjangoPasswordChangeDoneView):
+    template_name = 'account/password_change_done.html'
 
 
 @login_required
