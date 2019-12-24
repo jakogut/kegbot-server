@@ -17,7 +17,7 @@
 # along with Pykeg.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render

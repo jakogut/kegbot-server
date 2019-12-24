@@ -32,7 +32,7 @@ from distutils.version import StrictVersion
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import UserManager
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core import validators
 from django.core.cache import cache
 from django.core.files.storage import default_storage
