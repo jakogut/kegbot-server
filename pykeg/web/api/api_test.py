@@ -36,6 +36,8 @@ def create_site():
 
 
 class BaseApiTestCase(TransactionTestCase):
+    reset_sequences = True
+
     def get(self, subpath, data={}, follow=False, **extra):
         response = self.client.get('/api/%s' % subpath, data=data, follow=follow,
                                    **extra)
