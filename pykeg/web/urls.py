@@ -20,32 +20,40 @@
 from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
-from django.conf.urls import url
 from django.contrib import admin
 from django.views.generic.base import RedirectView
+from django.urls import re_path
+
+from pykeg.web.api import urls as api_urls
+from pykeg.web.account import urls as account_urls
+from pykeg.web.kbregistration import urls as registration_urls
+from pykeg.web.kegadmin import urls as admin_urls
+from pykeg.web.setup_wizard import urls as setup_urls
+from pykeg.contrib.demomode import urls as demomode_urls
+from pykeg.web.kegweb import urls as kegweb_urls
 
 admin.autodiscover()
 
 urlpatterns = [
     # api
-    url(r'^api/(?:v1/)?', include('pykeg.web.api.urls')),
+    re_path(r'^api/(?:v1/)?', include(api_urls)),
 
     # kegbot account
-    url(r'^account/', include('pykeg.web.account.urls')),
+    re_path(r'^account/', include(account_urls)),
 
     # auth account
-    url(r'^accounts/', include('pykeg.web.kbregistration.urls')),
+    re_path(r'^accounts/', include(registration_urls)),
 
     # kegadmin
-    url(r'^kegadmin/', include('pykeg.web.kegadmin.urls')),
+    re_path(r'^kegadmin/', include(admin_urls)),
 
     # Shortcuts
-    url(r'^link/?$', RedirectView.as_view(pattern_name='kegadmin-link-device')),
+    re_path(r'^link/?$', RedirectView.as_view(pattern_name='kegadmin-link-device')),
 ]
 
 if 'pykeg.web.setup_wizard' in settings.INSTALLED_APPS:
     urlpatterns += [
-        url(r'^setup/', include('pykeg.web.setup_wizard.urls')),
+        re_path(r'^setup/', include(setup_urls)),
     ]
 
 if settings.DEBUG:
@@ -54,15 +62,15 @@ if settings.DEBUG:
 
 if settings.KEGBOT_ENABLE_ADMIN:
     urlpatterns += [
-        url(r'^admin/', include(admin.site.urls)),
+        re_path(r'^admin/', admin.site.urls),
     ]
 
 if settings.DEMO_MODE:
     urlpatterns += [
-        url(r'^demo/', include('pykeg.contrib.demomode.urls')),
+        re_path(r'^demo/', include(demomode_urls)),
     ]
 
 # main kegweb urls
 urlpatterns += [
-    url(r'^', include('pykeg.web.kegweb.urls')),
+    re_path(r'^', include(kegweb_urls)),
 ]
