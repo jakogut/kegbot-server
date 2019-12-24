@@ -355,7 +355,7 @@ class KegbotSite(models.Model):
         if self.registration_mode == 'public':
             return True
         if self.registration_mode == 'member-invite-only':
-            return not user.is_anonymous()
+            return not user.is_anonymous
         if self.registration_mode == 'staff-invite-only':
             return user.is_staff
         return False
