@@ -371,9 +371,11 @@ class ApiKey(models.Model):
     """Grants access to certain API endpoints to a user via a secret key."""
 
     user = models.ForeignKey(User, blank=True, null=True,
-                             help_text='User receiving API access.')
+                             help_text='User receiving API access.',
+                             on_delete=models.CASCADE)
     device = models.ForeignKey(Device, null=True,
-                               help_text='Device this key is associated with.')
+                               help_text='Device this key is associated with.',
+                               on_delete=models.CASCADE)
     key = models.CharField(max_length=127, editable=False, unique=True,
                            default=get_default_api_key,
                            help_text='The secret key.')
@@ -457,7 +459,8 @@ class Beverage(models.Model):
 
     name = models.CharField(max_length=255,
                             help_text='Name of the beverage, such as "Potrero Pale".')
-    producer = models.ForeignKey(BeverageProducer)
+    producer = models.ForeignKey(BeverageProducer,
+                                 on_delete=models.CASCADE)
 
     beverage_type = models.CharField(max_length=32,
                                      choices=TYPES,
@@ -468,7 +471,8 @@ class Beverage(models.Model):
                                    help_text='Free-form description of the beverage.')
 
     picture = models.ForeignKey('Picture', blank=True, null=True,
-                                help_text='Label image.')
+                                help_text='Label image.',
+                                on_delete=models.SET_NULL)
     vintage_year = models.DateField(
         blank=True,
         null=True,
@@ -599,12 +603,14 @@ class FlowMeter(models.Model):
     class Meta:
         unique_together = ('controller', 'port_name')
     controller = models.ForeignKey(Controller, related_name='meters',
-                                   help_text='Controller that owns this meter.')
+                                   help_text='Controller that owns this meter.',
+                                   on_delete=models.CASCADE)
     port_name = models.CharField(max_length=128,
                                  help_text='Controller-specific data port name for this meter.')
     tap = models.OneToOneField(KegTap, blank=True, null=True,
                                related_name='meter',
-                               help_text='Tap to which this meter is currently bound.')
+                               help_text='Tap to which this meter is currently bound.',
+                               on_delete=models.SET_NULL)
     ticks_per_ml = models.FloatField(
         default=kb_common.DEFAULT_TICKS_PER_ML,
         help_text='Flow meter pulses per mL of fluid.  Common values: %s '
@@ -653,12 +659,14 @@ class FlowToggle(models.Model):
     class Meta:
         unique_together = ('controller', 'port_name')
     controller = models.ForeignKey(Controller, related_name='toggles',
-                                   help_text='Controller that owns this toggle.')
+                                   help_text='Controller that owns this toggle.',
+                                   on_delete=models.CASCADE)
     port_name = models.CharField(max_length=128,
                                  help_text='Controller-specific data port name for this toggle.')
     tap = models.OneToOneField(KegTap, blank=True, null=True,
                                related_name='toggle',
-                               help_text='Tap to which this toggle is currently bound.')
+                               help_text='Tap to which this toggle is currently bound.',
+                               on_delete=models.SET_NULL)
 
     def toggle_name(self):
         return '{}.{}'.format(self.controller.name, self.port_name)
@@ -877,7 +885,8 @@ class Drink(models.Model):
         User,
         related_name='drinks',
         editable=False,
-        help_text='User responsible for this Drink, or None if anonymous/unknown.')
+        help_text='User responsible for this Drink, or None if anonymous/unknown.',
+        on_delete=models.CASCADE)
     keg = models.ForeignKey(Keg, related_name='drinks',
                             on_delete=models.PROTECT, editable=False,
                             help_text='Keg against which this Drink is accounted.')
@@ -937,7 +946,8 @@ class AuthenticationToken(models.Model):
                            help_text='A secret value necessary to authenticate with this token.')
     user = models.ForeignKey(User, blank=True, null=True,
                              related_name='tokens',
-                             help_text='User in possession of and authenticated by this token.')
+                             help_text='User in possession of and authenticated by this token.',
+                             on_delete=models.CASCADE)
     enabled = models.BooleanField(default=True,
                                   help_text='Whether this token is considered active.')
     created_time = models.DateTimeField(auto_now_add=True,
@@ -1166,7 +1176,7 @@ class Thermolog(models.Model):
         get_latest_by = 'time'
         ordering = ('-time',)
 
-    sensor = models.ForeignKey(ThermoSensor)
+    sensor = models.ForeignKey(ThermoSensor, on_delete=models.CASCADE)
     temp = models.FloatField()
     time = models.DateTimeField()
 
@@ -1195,15 +1205,15 @@ class Stats(models.Model):
     """
     time = models.DateTimeField(default=timezone.now)
     stats = JSONField(encoder=kbjson.JSONEncoder)
-    drink = models.ForeignKey(Drink)
+    drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
 
     is_first = models.BooleanField(default=False,
                                    help_text='True if this is the most first record for the view.')
 
     # Any combination of these fields is allowed.
-    user = models.ForeignKey(User, related_name='stats', null=True)
-    keg = models.ForeignKey(Keg, related_name='stats', null=True)
-    session = models.ForeignKey(DrinkingSession, related_name='stats', null=True)
+    user = models.ForeignKey(User, related_name='stats', null=True, on_delete=models.CASCADE)
+    keg = models.ForeignKey(Keg, related_name='stats', null=True, on_delete=models.CASCADE)
+    session = models.ForeignKey(DrinkingSession, related_name='stats', null=True, on_delete=models.CASCADE)
 
     class Meta:
         get_latest_by = 'id'
@@ -1280,16 +1290,20 @@ class SystemEvent(models.Model):
     time = models.DateTimeField(help_text='Time of the event.')
     user = models.ForeignKey(User, blank=True, null=True,
                              related_name='events',
-                             help_text='User responsible for the event, if any.')
+                             help_text='User responsible for the event, if any.',
+                             on_delete=models.SET_NULL)
     drink = models.ForeignKey(Drink, blank=True, null=True,
                               related_name='events',
-                              help_text='Drink involved in the event, if any.')
+                              help_text='Drink involved in the event, if any.',
+                              on_delete=models.SET_NULL)
     keg = models.ForeignKey(Keg, blank=True, null=True,
                             related_name='events',
-                            help_text='Keg involved in the event, if any.')
+                            help_text='Keg involved in the event, if any.',
+                            on_delete=models.SET_NULL)
     session = models.ForeignKey(DrinkingSession, blank=True, null=True,
                                 related_name='events',
-                                help_text='Session involved in the event, if any.')
+                                help_text='Session involved in the event, if any.',
+                                on_delete=models.SET_NULL)
 
     objects = managers.SystemEventManager()
 
@@ -1417,7 +1431,8 @@ class Picture(models.Model):
                                help_text='Caption for the picture, if any.')
     user = models.ForeignKey(User, blank=True, null=True,
                              related_name='pictures',
-                             help_text='User that owns/uploaded this picture')
+                             help_text='User that owns/uploaded this picture',
+                             on_delete=models.SET_NULL)
     keg = models.ForeignKey(Keg, blank=True, null=True,
                             related_name='pictures',
                             on_delete=models.SET_NULL,
@@ -1473,7 +1488,8 @@ class NotificationSettings(models.Model):
         unique_together = ('user', 'backend')
 
     user = models.ForeignKey(User,
-                             help_text='User for these settings.')
+                             help_text='User for these settings.',
+                             on_delete=models.CASCADE)
     backend = models.CharField(max_length=255,
                                help_text='Notification backend (dotted path) for these settings.')
     keg_tapped = models.BooleanField(default=True,
